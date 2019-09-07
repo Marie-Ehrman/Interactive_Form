@@ -72,7 +72,6 @@ $('#design').change(function (){
 /********** ACTIVITY SECTION **********/
 
 //Create an element to display the total activity cost and append it to activities
-
 $('.activities').append('<label>Total Cost: </label>');
 
 //set activities total cost to 0 initially
@@ -82,30 +81,32 @@ let $totalCost = 0;
 $('.activities').change( function (e) {
 
     //variable to see if the boxes are checked
-    const $isChecked = e.target;
-    console.log($isChecked);
+    const $checkbox = e.target;
+ 
     //variable to collect the 'data-cost' from the checked box
-    const $activityCost = $($isChecked).attr('data-cost');
+    let $activityCost = $($checkbox).attr('data-cost');
+    //convert 'data-cost' string to an integer and bypass the $
+    $activityCost =  parseInt($activityCost.replace("$", ""));
 
-    function filterInt(value) {
-        if (/^[$]?(\d+)$/.test(value)) {
-          return parseInt(value);
-        } else {
-          return NaN;
-        }
-      }
-    filterInt($activityCost);
-    
-    console.log(filterInt($activityCost));
-
-    //Update and display the total activity cost
-    $totalCost += parseInt($activityCost);
+    //Update and display the total activity cost learned about .prop() on stack overflow
+    if ($($checkbox).prop('checked') == true){
+        $totalCost += parseInt($activityCost);
+    } else {
+        $totalCost -= parseInt($activityCost);
+    }
     console.log($totalCost);
+
+    //Disable conflicting activities
+    const $activityTime = $($checkbox).attr(`data-day-and-time`);
+
+    $('.activities').each(function (i) {
+
+        $($checkbox).eq(i)
+    }
+
 });
 
 
-
-//Disable conflicting activities
 
 
 
