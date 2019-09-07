@@ -32,14 +32,15 @@ $('#design').change(function (){
             $('#color option').eq(0).hide();
         
         //if "JS Puns" is chosen as the shirt design, enter into this conditional
-        if($('#design').val() === 'js puns'){
+        if ( $('#design').val() === 'js puns' ){
 
             //show the first 3 options of shirt color
-            if ( i < 4)  {  
+            if ( i < 4 )  {  
 
                 $('#color option').eq(i).removeAttr('selected', true);
                 $('#color option').eq(1).attr('selected', true);
                 $('#color option').eq(i).show();
+                
             //hide the last 3 options of shirt color
             } else {
 
@@ -48,9 +49,9 @@ $('#design').change(function (){
             }
 
         //if "I <3 JS" is chosen as the shirt design, enter into this conditional
-        } else if($('#design').val() === 'heart js'){
+        } else if ( $('#design').val() === 'heart js' ){
 
-            if ( i > 3)  {
+            if ( i > 3 )  {
             
             //show the last 3 options of shirt color
             $('#color option').eq(i).removeAttr('selected', true);
@@ -71,8 +72,12 @@ $('#design').change(function (){
 
 /********** ACTIVITY SECTION **********/
 
+//CALCULATE COST
+
 //Create an element to display the total activity cost and append it to activities
-$('.activities').append('<label>Total Cost: </label>');
+let $totalCostElement = $('<label></label>');
+
+$('.activities').append($totalCostElement);
 
 //set activities total cost to 0 initially
 let $totalCost = 0;
@@ -85,57 +90,90 @@ $('.activities').change( function (e) {
  
     //variable to collect the 'data-cost' from the checked box
     let $activityCost = $($checkbox).attr('data-cost');
+
     //convert 'data-cost' string to an integer and bypass the $
     $activityCost =  parseInt($activityCost.replace("$", ""));
 
-    //Update and display the total activity cost learned about .prop() on stack overflow
+    //Update and display the total activity cost 
     if ($($checkbox).prop('checked') == true){
         $totalCost += parseInt($activityCost);
     } else {
         $totalCost -= parseInt($activityCost);
     }
-    console.log($totalCost);
 
-    //Disable conflicting activities
-    const $activityTime = $($checkbox).attr(`data-day-and-time`);
+    //set the text of the total cost element equal to the string ‘Total:
+    //$’ with the current value of the total cost variable
+    $($totalCostElement).text('Total: $' + $totalCost);
 
-    $('.activities').each(function (i) {
 
-        $($checkbox).eq(i)
-    }
 
+    //DISABLE CONFLICTING ACTIVITIES
+
+
+    //set the clicked activity
+    let $selectedActivity = $($checkbox).attr(`data-day-and-time`);
+
+    //get the input elements in the activities fieldset
+    let $activityInput = $('.activities input');
+
+    //loop through the activities input elements that were declared above
+    $($activityInput).each( function (i) {
+
+        //if activity time is the same as selected input's AND the indexed 
+        //activities name doesn't match the one that was clicked
+        if ( $selectedActivity === $activityInput.eq(i).attr(`data-day-and-time`) && 
+             $($activityInput).eq(i).attr(`name`) !== $($checkbox).attr(`name`)){
+
+                //If the clicked activity was checked, then set the matching 
+                //activity element's `disabled` property to `true`
+                if ($($checkbox).prop('checked')){
+
+                    $($activityInput).eq(i).attr('disabled', true);
+
+                // If the clicked activity was unchecked, then set the matching 
+                //activity element's `disabled` property to `false`.
+                } else {
+
+                    $($activityInput).eq(i).attr('disabled', false);
+
+                }
+        }
+    });
 });
-
-
-
-
-
 
 
 
 /********** PAYMENT SECTION **********/
 
+//Hide “Select Payment Method” so it doesn’t show up in the drop down menu.
 $('#payment option').eq(0).hide();
 
+//loop through elements of the payment section
 $('#payment').change(function (){
+
+    //if Credit Card is selected, only display this section of the form
     if ( $('#payment').val() === 'Credit Card'){
         $('#credit-card').show();
         $('#paypal').hide();
         $('#bitcoin').hide();
     } 
+       
+    //else if PayPal is selected, only display this section of the form
     else if ( $('#payment').val() === 'PayPal'){
         $('#paypal').show();
         $('#bitcoin').hide();
         $('#credit-card').hide();
     }
+    
+    //else if Bitcoin is selected, only display this section of the form
     else if ( $('#payment').val() === 'Bitcoin'){
         $('#bitcoin').show();
         $('#credit-card').hide();
         $('#paypal').hide();
     }
-
-
 });
 
 
+
 /********** FORM VALIDATION SECTION **********/
+
