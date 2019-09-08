@@ -62,35 +62,35 @@ $('#design').change(function (){
         //if "JS Puns" is chosen as the shirt design, enter into this conditional
         if ( $('#design').val() === 'js puns' ){
 
-            //show the first 3 options of shirt color
-            if ( i < 4 )  {  
+                //show the first 3 options of shirt color
+                if ( i < 4 )  {  
 
-                $('#color option').eq(i).removeAttr('selected', true);
-                $('#color option').eq(1).attr('selected', true);
-                $('#color option').eq(i).show();
-                
-            //hide the last 3 options of shirt color
-            } else {
+                    $('#color option').eq(i).removeAttr('selected', true);
+                    $('#color option').eq(1).attr('selected', true);
+                    $('#color option').eq(i).show();
+                    
+                //hide the last 3 options of shirt color
+                } else {
 
-                $('#color option').eq(i).hide();
+                    $('#color option').eq(i).hide();
 
-            }
+                }
 
         //if "I <3 JS" is chosen as the shirt design, enter into this conditional
         } else if ( $('#design').val() === 'heart js' ){
 
-            if ( i > 3 )  {
-            
-            //show the last 3 options of shirt color
-            $('#color option').eq(i).removeAttr('selected', true);
-            $('#color option').eq(4).attr('selected', true);
-            $('#color option').eq(i).show();
-            
-            //hide the first 3 options of shirt color
-            } else {
+                if ( i > 3 )  {
+                
+                //show the last 3 options of shirt color
+                $('#color option').eq(i).removeAttr('selected', true);
+                $('#color option').eq(4).attr('selected', true);
+                $('#color option').eq(i).show();
+                
+                //hide the first 3 options of shirt color
+                } else {
 
-                $('#color option').eq(i).hide();
-            }
+                    $('#color option').eq(i).hide();
+                }
         }
 
     });
@@ -104,7 +104,6 @@ $('#design').change(function (){
 
 //Create an element to display the total activity cost and append it to activities
 let $totalCostElement = $('<label></label>');
-
 $('.activities').append($totalCostElement);
 
 //set activities total cost to 0 initially
@@ -117,8 +116,6 @@ $('.activities').change( function (e) {
 
     //variable to see if the boxes are checked
     const $checkbox = e.target;
-
- 
 
     //variable to collect the 'data-cost' from the checked box
     let $activityCost = $($checkbox).attr('data-cost');
@@ -138,8 +135,8 @@ $('.activities').change( function (e) {
     $($totalCostElement).text('Total: $' + $totalCost);
 
 
-    //DISABLE CONFLICTING ACTIVITIES
 
+    //DISABLE CONFLICTING ACTIVITIES
 
     //set the clicked activity
     let $selectedActivity = $($checkbox).attr(`data-day-and-time`);
@@ -210,8 +207,11 @@ $('#payment').change(function (){
 
 /********** FORM VALIDATION SECTION **********/
 
+//validate name input
 function nameValidation ($name){
 
+    //if the name input doesn't meet the requirements highlight the field
+    //red and append a message, also return false 
     if (/^[A-Za-z]+(\s[A-Za-z]+)?(\s[A-Za-z]+)?$/.test($name) === false){
 
         $('#name').append('<span>Please enter your name</span>');
@@ -226,8 +226,11 @@ function nameValidation ($name){
     }
 }
 
+//validate email input
 function emailValidation ($email){
 
+    //if the email input doesn't meet the requirements highlight the field
+    //red and append a message, also return false 
     if( /^[^@]+@[^@.]+\.[a-z]+(\.[a-z]+)?$/i.test($email) === false){
 
         $('#email').append('<span>Please enter your email address</span>');
@@ -242,11 +245,12 @@ function emailValidation ($email){
     }
 }
 
-//Activity 
+//Validate Activity field by looping through elements to see if any are checked
 function activityValidation ($activityInput){
 
     $($activityInput).each( function (i) {
 
+        //if none are checked highlight the boxes red and return false
         if ( $($checkbox).eq(i).prop('checked') === false){
 
             $('.activities input').css('border', 'red');
@@ -255,12 +259,13 @@ function activityValidation ($activityInput){
     });
 }
 
-//$('button').on('click', activityValidation ($activityInput));
 
 //Credit Card validation (only if Credit Card is picked)
 //ensure 13-16 #s are entered
 function ccNumValidation ($ccNum){
     
+    //if the credit card number input doesn't meet the requirements highlight the field
+    //red and append a message, also return false 
     if (/^(\d{4}\s?){3}\d{4}$/.test($ccNum) === false){
 
         $('#cc-num').append('<span>Please enter a valid Credit Card Number</span>');
@@ -278,6 +283,8 @@ function ccNumValidation ($ccNum){
 //Credit Card Zip validation (only if Credit Card is picked)
 function ccZipValidation ($ccZip){
    
+    //if the zip input doesn't meet the requirements highlight the field
+    //red and append a message, also return false 
     if (/^\d{5}$/.test($ccZip) === false){
         
         $('#zip').append('<span>Please enter a Zip Code</span>');
@@ -295,6 +302,8 @@ function ccZipValidation ($ccZip){
 //Credit Card CVV# validation (only if Credit Card is picked)
 function cvvValidation ($cvv){
     
+    //if the cvv input doesn't meet the requirements highlight the field
+    //red and append a message, also return false 
     if (/^\d{3}&/.test($cvv) === false){
 
         $('#cvv').append('<span>Please enter a cvv(found on back of card)</span>');
@@ -309,8 +318,11 @@ function cvvValidation ($cvv){
     }
 }
 
+
+//function to test validation functions
 function isValid(){
 
+    //if any validation functions are false, this function returns false
     if(!nameValidation($name) || !emailValidation($email)|| !activityValidation($activityInput)){
 
         return false;
@@ -320,6 +332,8 @@ function isValid(){
 }
 
 
+//handler on submit button to call parent validation function 'isValid' and prevent default submit
+//behavior if any of them are false
 $('form').on('submit', function(isValid){
 
         if(isValid){
