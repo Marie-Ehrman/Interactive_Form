@@ -1,22 +1,19 @@
 /*********** Marie Ehrman's Unit 3 Project. Interactive Form ***********/
 
 
-
 //focus the name field when the page loads
 $('#name').focus();
 
 
-
 /****************************** NAME SECTION ******************************/
 
-//wanted to find a way to check validation on changes in a form field
-//discovered the "keyup()" method after some research and decided to use it
-//to handle such events
+// wanted to find a way to check validation on changes in a form field
+// discovered the "keyup()" method after some research and decided to use it
+// to handle such events
 
 
 //if cursor goes to next field, the name field will be checked for errors
 $('#name').keyup( function (){ nameValidation();} );
-
 
 
 /****************************** EMAIL SECTION ******************************/
@@ -54,7 +51,9 @@ $('#color').prepend('<option selected>Please select a T-shirt theme</option>');
 //initially hide the colors in the “Color” drop down menu.
 $('#color option').each(function (i) {
     if (i>=0){
+
     $('#color option').eq(i).hide();
+
     }
 });
 
@@ -70,43 +69,43 @@ $('#design').change(function (){
 
     $('#color option').each(function (i) {
 
-        $('#color option').eq(0).hide();
-        
-        //if "JS Puns" is chosen as the shirt design, enter into this conditional
-        if ( $('#design').val() === 'js puns' ){
+            $('#color option').eq(0).hide();
+            
+            //if "JS Puns" is chosen as the shirt design, enter into this conditional
+            if ( $('#design').val() === 'js puns' ){
 
-                //show the first 3 options of shirt color
-                if ( i < 4 )  {  
+                    //show the first 3 options of shirt color
+                    if ( i < 4 )  {  
 
+                        $('#color option').eq(i).removeAttr('selected', true);
+                        $('#color option').eq(1).attr('selected', true);
+                        $('#color option').eq(i).show();
+                        
+                    //hide the last 3 options of shirt color
+                    } else {
+
+                        $('#color option').eq(i).hide();
+
+                    }
+
+            //if "I <3 JS" is chosen as the shirt design, enter into this conditional
+            } else if ( $('#design').val() === 'heart js' ){
+
+                    if ( i > 3 )  {
+                    
+                    //show the last 3 options of shirt color
                     $('#color option').eq(i).removeAttr('selected', true);
-                    $('#color option').eq(1).attr('selected', true);
+                    $('#color option').eq(4).attr('selected', true);
                     $('#color option').eq(i).show();
                     
-                //hide the last 3 options of shirt color
-                } else {
+                    //hide the first 3 options of shirt color
+                    } else {
 
-                    $('#color option').eq(i).hide();
+                        $('#color option').eq(i).hide();
+                    }
+            }
 
-                }
-
-        //if "I <3 JS" is chosen as the shirt design, enter into this conditional
-        } else if ( $('#design').val() === 'heart js' ){
-
-                if ( i > 3 )  {
-                
-                //show the last 3 options of shirt color
-                $('#color option').eq(i).removeAttr('selected', true);
-                $('#color option').eq(4).attr('selected', true);
-                $('#color option').eq(i).show();
-                
-                //hide the first 3 options of shirt color
-                } else {
-
-                    $('#color option').eq(i).hide();
-                }
-        }
-
-    });
+        });
 
 });
 
@@ -126,8 +125,6 @@ let $totalCost = 0;
 //Listen for changes in the Activity section
 $('.activities').change( function (e) {
 
-
-
     //variable to see if the boxes are checked
     const $checkbox = e.target;
 
@@ -139,15 +136,18 @@ $('.activities').change( function (e) {
 
     //Update and display the total activity cost 
     if ($($checkbox).prop('checked') == true){
-        $totalCost += parseInt($activityCost);
+
+            $totalCost += parseInt($activityCost);
+
     } else {
-        $totalCost -= parseInt($activityCost);
+
+            $totalCost -= parseInt($activityCost);
+
     }
 
     //set the text of the total cost element equal to the string ‘Total:
     //$’ with the current value of the total cost variable
     $($totalCostElement).text('Total: $' + $totalCost);
-
 
 
     //DISABLE CONFLICTING ACTIVITIES
@@ -158,6 +158,7 @@ $('.activities').change( function (e) {
     //get the input elements in the activities fieldset
     let $activityInput = $('.activities input');
 
+    
     //loop through the activities input elements that were declared above
     $($activityInput).each( function (i) {
 
@@ -185,47 +186,61 @@ $('.activities').change( function (e) {
 
 });
 
-//validate activities list after each box is checked
-//discovered the "change()" method after some research and decided to use it
-//to handle this for checkboxes
-
+//validate activities list after each box is checked discovered the "change()"
+// method after some research and decided to use it to handle this for checkboxes
 $('.activities').change( function () { activityValidation(); });
 
 
-
-
 /********** PAYMENT SECTION **********/
+let ccSelected;
 
 //Hide “Select Payment Method” so it doesn’t show up in the drop down menu.
 $('#payment option').eq(0).hide();
-// $('#payment option').eq(1).attr('selected', true);
+$('#payment option').eq(1).attr('selected', true);
 
-//loop through elements of the payment section
+
+//set CC as the default payment option on page load
+if ( $('#payment').val() === 'Credit Card'){
+        $('#credit-card').show();
+        $('#paypal').hide();
+        $('#bitcoin').hide();
+        ccSelected = true;
+} 
+
+//listen for change event in the payment drop down menu
 $('#payment').change(function (){
 
-        //if Credit Card is selected, only display this section of the form
+         //if Credit Card is selected, only display this section of the form
         if ( $('#payment').val() === 'Credit Card'){
+
                 $('#credit-card').show();
                 $('#paypal').hide();
                 $('#bitcoin').hide();
                 ccNumValidation();
                 ccZipValidation();
                 cvvValidation();
-                trueCount += 1;
+                ccSelected = true;
+
         } 
-        
-        //else if PayPal is selected, only display this section of the form
+
+        // else if PayPal is selected, only display this section of the form
         else if ( $('#payment').val() === 'PayPal'){
+
                 $('#paypal').show();
                 $('#bitcoin').hide();
                 $('#credit-card').hide();
+                ccSelected = false;
+
         }
-        
+
         //else if Bitcoin is selected, only display this section of the form
         else if ( $('#payment').val() === 'Bitcoin'){
+
                 $('#bitcoin').show();
                 $('#credit-card').hide();
                 $('#paypal').hide();
+                ccSelected = true;
+
         }
 });
 
@@ -242,29 +257,25 @@ $('#cvv').on('keyup', function (){ cvvValidation(); });
 
 /****************************** FORM VALIDATION SECTION ******************************/
 
-//set a global counter for true validations to test in validation function
-let trueCount;
-
 //validate name input
 function nameValidation (){
 
     const $nameValue = $('#name').val();
+
     //if the name input doesn't meet the requirements highlight the field
     //red and append a message, also return false 
-
-
     if (/^[A-Za-z]+(\s[A-Za-z]+)?(\s[A-Za-z]+)?$/i.test($nameValue) === true){
     
-        $('#name').css('border-color', '#6f9ddc');
-        trueCount +=1;
-        return true;
+            $('#name').css('border-color', '#6f9ddc');
+
+            return true;
 
     } else {
      
-        $('#name').attr('placeholder', 'Please enter your name');
-        $('#name').css('border-color', 'red');
+            $('#name').attr('placeholder', 'Please enter your name');
+            $('#name').css('border-color', 'red');
 
-        return false;
+            return false;
 
     }
 }
@@ -280,16 +291,16 @@ function emailValidation (){
 
     if( /^[^@]+@[^@.]+\.[a-z]+(\.[a-z]+)?$/i.test($emailValue) === true){
 
-       $('#mail').css('border-color', '#6f9ddc');
-       trueCount +=1;
-
-        return true;
+        $('#mail').css('border-color', '#6f9ddc');
+        
+            return true;
 
     } else {
 
-        $('#mail').attr('placeholder', 'Please enter your email');
-        $('#mail').css('border-color', 'red');
-        return false;
+            $('#mail').attr('placeholder', 'Please enter your email');
+            $('#mail').css('border-color', 'red');
+
+            return false;
 
     }
 }
@@ -299,19 +310,18 @@ function activityValidation (){
 
     if($totalCost > 0){
 
-        $('.activities legend').css('color', 'black');
-        $('h5').remove();
+            $('.activities legend').css('color', 'black');
+            $('h5').remove();
 
-        trueCount +=1;
-        return true;
+            return true;
         
     } else {
 
-        $('h5').remove();
-        $('.activities legend').css('color', 'red');
-        $('.activities legend').append('<h5> *Please select at least one Activity</h5>');
+            $('h5').remove();
+            $('.activities legend').css('color', 'red');
+            $('.activities legend').append('<h5> *Please select at least one Activity</h5>');
 
-        return false;
+            return false;
 
     }
 }
@@ -327,14 +337,16 @@ function ccNumValidation (){
     //red and append a message, also return false 
     if (/^(\d{4}\s?){3}\d{4}$/.test($ccNumValue) === true){
 
-        $('#cc-num').css('border-color', '#6f9ddc');
-        return true;
+            $('#cc-num').css('border-color', '#6f9ddc');
+
+            return true;
 
     } else {
 
-        $('#cc-num').attr('placeholder', 'Please enter a Credit Card Number');
-        $('#cc-num').css('border-color', 'red');
-        return false;
+            $('#cc-num').attr('placeholder', 'Please enter a Credit Card Number');
+            $('#cc-num').css('border-color', 'red');
+
+            return false;
 
     }
 }
@@ -348,15 +360,17 @@ function ccZipValidation (){
     //red and append a message, also return false 
     if (/^\d{5}$/.test($ccZipValue) === true){
 
-        $('#zip').css('border-color', '#6f9ddc');
-        return true;
+            $('#zip').css('border-color', '#6f9ddc');
+
+            return true;
 
     } else {
 
                 
-        $('#zip').attr('placeholder', 'Enter Zip Code');
-        $('#zip').css('border-color', 'red');
-        return false;
+            $('#zip').attr('placeholder', 'Enter Zip Code');
+            $('#zip').css('border-color', 'red');
+
+            return false;
 
 
     }
@@ -371,61 +385,60 @@ function cvvValidation (){
     //red and append a message, also return false 
     if (/^\d{3}$/.test($cvvValue) === true){
 
-        $('#cvv').css('border-color', '#6f9ddc');
-        return true;
+            $('#cvv').css('border-color', '#6f9ddc');
+
+            return true;
 
     } else {
 
-        $('#cvv').attr('placeholder', 'Enter CVV');
-        $('#cvv').css('border-color', 'red');
-        return false;
+            $('#cvv').attr('placeholder', 'Enter CVV');
+            $('#cvv').css('border-color', 'red');
+
+            return false;
     }
 }
 
 
 //function to test validation functions
 function isValid(){
-console.log(nameValidation());
-console.log(emailValidation());
-console.log(activityValidation());
 
-    if (nameValidation() && emailValidation() && activityValidation()){
-        console.log('running true');
+        if (nameValidation() && emailValidation() && activityValidation()){
 
+                nameValidation();
+                emailValidation();
+                activityValidation();
+            if (ccSelected === true){
+                ccNumValidation();
+                ccZipValidation();
+                cvvValidation();
+            }
 
-        nameValidation();
-        emailValidation();
-        activityValidation();
+            return true;
 
-        return true;
+            } else {
 
-     } else {
-        console.log('running false');
+                nameValidation();
+                emailValidation();
+                activityValidation();
+                if (ccSelected === true){
+                ccNumValidation();
+                ccZipValidation();
+                cvvValidation();
+            }
 
-        nameValidation();
-        emailValidation();
-        activityValidation();
+            return false;
 
-        return false;
-
-    }
+        }
 }
 
 //handler on submit button to call parent validation function 'isValid' and prevent default submit
 //behavior if any of them are false
 $('form').on('submit', function (e){
 
-    console.log('submit button is functional!');
-
         if(!isValid()){
 
         e.preventDefault();
 
         }
-         else {   
-        
-        console.log('your form is true!!!!')
-        
-        e.preventDefault();
-         }
+
 });
