@@ -192,19 +192,19 @@ $('.activities').change( function () { activityValidation(); });
 
 
 /********** PAYMENT SECTION **********/
-let ccSelected;
 
 //Hide “Select Payment Method” so it doesn’t show up in the drop down menu.
 $('#payment option').eq(0).hide();
 $('#payment option').eq(1).attr('selected', true);
 
+let ccSelected = true;
 
 //set CC as the default payment option on page load
 if ( $('#payment').val() === 'Credit Card'){
+        ccSelected = true;
         $('#credit-card').show();
         $('#paypal').hide();
         $('#bitcoin').hide();
-        ccSelected = true;
 } 
 
 //listen for change event in the payment drop down menu
@@ -212,34 +212,29 @@ $('#payment').change(function (){
 
          //if Credit Card is selected, only display this section of the form
         if ( $('#payment').val() === 'Credit Card'){
-
+                ccSelected = true;
                 $('#credit-card').show();
                 $('#paypal').hide();
                 $('#bitcoin').hide();
-                ccNumValidation();
-                ccZipValidation();
-                cvvValidation();
-                ccSelected = true;
+
 
         } 
 
         // else if PayPal is selected, only display this section of the form
         else if ( $('#payment').val() === 'PayPal'){
-
+                ccSelected = false;
                 $('#paypal').show();
                 $('#bitcoin').hide();
                 $('#credit-card').hide();
-                ccSelected = false;
 
         }
 
         //else if Bitcoin is selected, only display this section of the form
         else if ( $('#payment').val() === 'Bitcoin'){
-
+                ccSelected = false;
                 $('#bitcoin').show();
                 $('#credit-card').hide();
                 $('#paypal').hide();
-                ccSelected = true;
 
         }
 });
@@ -273,7 +268,7 @@ function nameValidation (){
     } else {
      
             $('#name').attr('placeholder', 'Please enter your name');
-            $('#name').css('border-color', 'red');
+            $('#name').css('border-color', 'salmon');
 
             return false;
 
@@ -298,7 +293,7 @@ function emailValidation (){
     } else {
 
             $('#mail').attr('placeholder', 'Please enter your email');
-            $('#mail').css('border-color', 'red');
+            $('#mail').css('border-color', 'salmon');
 
             return false;
 
@@ -307,19 +302,19 @@ function emailValidation (){
 
 //Validate Activity field by checking the cost. If no activities are checked cost will be $0
 function activityValidation (){
+let $activityError = '<span>*Please select at least one Activity</span>';
 
     if($totalCost > 0){
 
             $('.activities legend').css('color', 'black');
-            $('h5').remove();
+            $('span').remove();
 
             return true;
         
     } else {
 
-            $('h5').remove();
-            $('.activities legend').css('color', 'red');
-            $('.activities legend').append('<h5> *Please select at least one Activity</h5>');
+            $('span').remove();
+            $('.activities legend').append($activityError);
 
             return false;
 
@@ -335,7 +330,7 @@ function ccNumValidation (){
 
     //if the credit card number input doesn't meet the requirements highlight the field
     //red and append a message, also return false 
-    if (/^(\d{4}\s?){3}\d{4}$/.test($ccNumValue) === true){
+    if (/^(\d{4}\s?){3}(\d?){4}$/.test($ccNumValue) === true){
 
             $('#cc-num').css('border-color', '#6f9ddc');
 
@@ -344,7 +339,7 @@ function ccNumValidation (){
     } else {
 
             $('#cc-num').attr('placeholder', 'Please enter a Credit Card Number');
-            $('#cc-num').css('border-color', 'red');
+            $('#cc-num').css('border-color', 'salmon');
 
             return false;
 
@@ -368,7 +363,7 @@ function ccZipValidation (){
 
                 
             $('#zip').attr('placeholder', 'Enter Zip Code');
-            $('#zip').css('border-color', 'red');
+            $('#zip').css('border-color', 'salmon');
 
             return false;
 
@@ -392,30 +387,45 @@ function cvvValidation (){
     } else {
 
             $('#cvv').attr('placeholder', 'Enter CVV');
-            $('#cvv').css('border-color', 'red');
+            $('#cvv').css('border-color', 'salmon');
 
             return false;
     }
 }
 
 
+
 //function to test validation functions
 function isValid(){
 
-        if (nameValidation() && emailValidation() && activityValidation()){
+    if(ccSelected === true){
+        if (nameValidation() && 
+        emailValidation() && 
+        activityValidation() && 
+        ccNumValidation() && 
+        ccZipValidation() && 
+        cvvValidation()){
+                    console.log('entered into the cc selected');
 
+                    nameValidation();
+                    emailValidation();
+                    activityValidation();
+                    ccNumValidation();
+                    ccZipValidation();
+                    cvvValidation();
+                return true;
+            }
+
+    } else if (nameValidation() && emailValidation() && activityValidation()){
+            console.log('entered into the true');
                 nameValidation();
                 emailValidation();
                 activityValidation();
-            if (ccSelected === true){
-                ccNumValidation();
-                ccZipValidation();
-                cvvValidation();
-            }
 
             return true;
 
             } else {
+                console.log('entered into the FALSE');
 
                 nameValidation();
                 emailValidation();
@@ -434,11 +444,22 @@ function isValid(){
 //handler on submit button to call parent validation function 'isValid' and prevent default submit
 //behavior if any of them are false
 $('form').on('submit', function (e){
+console.log(nameValidation());
+console.log(emailValidation());
+console.log(activityValidation());
+console.log(ccNumValidation());
+console.log(ccZipValidation());
+console.log(cvvValidation());
 
         if(!isValid()){
+            console.log('form will NOT submit, NOT all are true');
 
         e.preventDefault();
 
+        } else {
+
+            console.log('form will submit, all are true');
+            e.preventDefault();
         }
 
 });

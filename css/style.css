@@ -90,7 +90,7 @@ input {
 	font-weight: 500;
 	padding: .8em;
 	background: #e9f6fb;
-	border: 2px solid #6F9DDC;
+	border: 2px solid #6f9ddc;
 	border-radius: 3px;
 	outline: none;
 }
@@ -139,6 +139,15 @@ option {
 .shirt div {
 	float: left;
 	margin-right: .85em;
+}
+
+/*********added error span for activities section*******/
+
+.activities span{
+	display: inline-block;
+	margin-left: 10px;
+	font-size: .6em;
+	color: indianred;
 }
 
 .interests input {
