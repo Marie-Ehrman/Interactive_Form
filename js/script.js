@@ -397,27 +397,36 @@ function cvvValidation (){
 
 //function to test validation functions
 function isValid(){
+    
+    //call functions to initialize values
+    nameValidation();
+    emailValidation();
+    activityValidation();
+    ccNumValidation();
+    ccZipValidation();
+    cvvValidation();
 
+    //ic CC is selected we want to test all validation functions
     if(ccSelected === true){
-        if (nameValidation() && 
-        emailValidation() && 
-        activityValidation() && 
-        ccNumValidation() && 
-        ccZipValidation() && 
-        cvvValidation()){
-                    console.log('entered into the cc selected');
 
-                    nameValidation();
-                    emailValidation();
-                    activityValidation();
-                    ccNumValidation();
-                    ccZipValidation();
-                    cvvValidation();
+            if (nameValidation() && 
+            emailValidation() && 
+            activityValidation() && 
+            ccNumValidation() && 
+            ccZipValidation() && 
+            cvvValidation()){
+
+                        nameValidation();
+                        emailValidation();
+                        activityValidation();
+                        ccNumValidation();
+                        ccZipValidation();
+                        cvvValidation();
                 return true;
-            }
-
+                }
+    //if CC is not selected we only test the name, email and activity fields for validity
     } else if (nameValidation() && emailValidation() && activityValidation()){
-            console.log('entered into the true');
+
                 nameValidation();
                 emailValidation();
                 activityValidation();
@@ -425,7 +434,6 @@ function isValid(){
             return true;
 
             } else {
-                console.log('entered into the FALSE');
 
                 nameValidation();
                 emailValidation();
@@ -444,21 +452,10 @@ function isValid(){
 //handler on submit button to call parent validation function 'isValid' and prevent default submit
 //behavior if any of them are false
 $('form').on('submit', function (e){
-console.log(nameValidation());
-console.log(emailValidation());
-console.log(activityValidation());
-console.log(ccNumValidation());
-console.log(ccZipValidation());
-console.log(cvvValidation());
+
 
         if(!isValid()){
-            console.log('form will NOT submit, NOT all are true');
 
-        e.preventDefault();
-
-        } else {
-
-            console.log('form will submit, all are true');
             e.preventDefault();
         }
 
