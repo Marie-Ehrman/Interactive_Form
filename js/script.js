@@ -330,7 +330,7 @@ function ccNumValidation (){
 
     //if the credit card number input doesn't meet the requirements highlight the field
     //red and append a message, also return false 
-    if (/^(\d{4}\s?){3}(\d?){4}$/.test($ccNumValue) === true){
+    if (/^(\d{4}\s?){3}\d(\d?){3}$/.test($ccNumValue) === true){
 
             $('#cc-num').css('border-color', '#6f9ddc');
 
